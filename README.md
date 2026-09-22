@@ -1,5 +1,8 @@
 # Field notes on Jev (System One)
 
+[![checks](https://github.com/scd13150/jev-field-notes/actions/workflows/checks.yml/badge.svg)](https://github.com/scd13150/jev-field-notes/actions/workflows/checks.yml)
+[![license: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
+
 **Applications, measurements and failure-mode analysis built on TypeSafe Jev** — the typed-decision
 model that returns `Choice` / `Score` / `Noul` judgments instead of generated text.
 
@@ -20,6 +23,10 @@ was worse than doing nothing, and those cases turned out to be the most useful p
 **Three applications,** across three unrelated domains — a real-time game, audio synthesis, and
 vector drawing — plus two papers and a list of sixteen falsifiable findings. Two of the three run
 offline with no API key, so the claims can be checked for free.
+
+The badge above is real: every push runs the two offline harnesses (52 engine tests and the SVG
+probe's geometry assertions) on GitHub's runners. The steps that are *not* run there, and why, are
+written into [`.github/workflows/checks.yml`](.github/workflows/checks.yml).
 
 ---
 

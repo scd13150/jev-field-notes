@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stick Figure — JEV Fighting</title>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 system-ui, sans-serif; background: #070a12; color: #e6ecff; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 18px; }
+  h1 { font-size: 18px; margin: 0; font-weight: 650; letter-spacing: .3px; }
+  .sub { color: #8ea0c8; font-size: 12px; margin: 0 0 4px; }
+  #wrap { width: 900px; max-width: 96vw; }
+  .bars { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+  .side { flex: 1; }
+  .side.right { text-align: right; }
+  .name { font-weight: 700; font-size: 13px; margin-bottom: 3px; }
+  .track { height: 14px; background: #1a2340; border-radius: 7px; overflow: hidden; border: 1px solid #2b3963; }
+  .track > i { display: block; height: 100%; width: 100%; transition: width .08s linear; }
+  #hp1 { background: #5ad1ff; } #hp2 { background: #ff5a6e; float: right; }
+  .meter { height: 5px; margin-top: 3px; background: #1a2340; border-radius: 3px; overflow: hidden; }
+  .meter > i { display: block; height: 100%; background: #ffd166; width: 0%; }
+  .combo { height: 16px; font-size: 12px; color: #ffd166; margin-top: 2px; }
+  canvas { width: 100%; display: block; background: #0e1220; border: 1px solid #24304f; border-radius: 10px; }
+  .hud { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; margin-top: 10px; font-size: 12px; }
+  .pill { background: #131c33; border: 1px solid #2b3963; border-radius: 20px; padding: 4px 10px; }
+  select, button { background: #16203a; color: #e6ecff; border: 1px solid #33457a; border-radius: 8px; padding: 5px 9px; font: inherit; }
+  button { cursor: pointer; }
+  kbd { background: #1d2848; border: 1px solid #3a4d84; border-bottom-width: 2px; border-radius: 5px; padding: 1px 5px; font: 11px ui-monospace, monospace; }
+  #keys { color: #9fb0d6; font-size: 12px; line-height: 1.9; }
+</style>
+</head>
+<body>
+  <div id="wrap">
+    <h1>Stick Figure — JEV Fighting</h1>
+    <p class="sub">You drive the blue fighter. A TypeSafe <b>Jev</b> System-One brain drives the red one, reacting in near-real-time while the engine owns the physics, hitboxes and combo links.</p>
+    <div class="bars">
+      <div class="side"><div class="name" style="color:#5ad1ff">YOU</div>
+        <div class="track"><i id="hp1"></i></div>
+        <div class="meter"><i id="m1"></i></div>
+        <div class="combo" id="c1"></div></div>
+      <div class="side right"><div class="name" style="color:#ff5a6e">JEV</div>
+        <div class="track"><i id="hp2"></i></div>
+        <div class="meter"><i id="m2" style="float:right"></i></div>
+        <div class="combo" id="c2"></div></div>
+    </div>
+    <canvas id="stage"></canvas>
+    <div class="hud">
+      <span class="pill" id="mode-badge">JEV: …</span>
+      <span class="pill">brain <span id="je-strat">…</span></span>
+      <span class="pill">latency <span id="je-lat">…</span></span>
+      <label>persona
+        <select id="persona">
+          <option value="balanced">balanced</option>
+          <option value="rushdown">rushdown</option>
+          <option value="zoner">zoner</option>
+          <option value="counter">counter</option>
+        </select></label>
+      <span><button id="reset">rematch (R)</button></span>
+      <span class="pill"><button id="modebtn" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyM'}))">toggle mode (M): P v JEV / JEV v JEV</button></span>
+    </div>
+    <div id="keys" style="margin-top:10px">
+      <kbd>A</kbd>/<kbd>D</kbd> move · <kbd>W</kbd> jump · <kbd>S</kbd> crouch · <kbd>Space</kbd> block ·
+      <kbd>J</kbd> jab · <kbd>K</kbd> strong · <kbd>U</kbd> launcher · <kbd>I</kbd> sweep · <kbd>O</kbd> fireball · <kbd>H</kbd> air-kick · <kbd>T</kbd> throw · <kbd>G</kbd> super · <kbd>B</kbd> burst<br>
+      Chain them: jab → strong → launcher launches the foe, then jump + <kbd>H</kbd> to juggle for air extensions. Press <kbd>M</kbd> to watch the two JEV brains spar.<br>
+      The triangle: <b>throw beats block</b>, attack beats throw, block beats attack — so <kbd>T</kbd> punishes a foe who holds <kbd>Space</kbd>. Blocking only chips, so defense is never free.<br>
+      Guard has a height, and each stance has exactly one wrong answer: a <b>standing</b> block eats highs and mids but not <kbd>I</kbd> sweep (low); a <b>crouching</b> block eats lows and ground strikes but not <kbd>H</kbd> air-kick (overhead); <kbd>T</kbd> throw beats both and is unblockable, but only catches a grounded foe — jump it. A blocked strike leaves a few frames where you can cancel straight into the low or the grab: that is the tick throw, and it is why holding guard is a decision, not a habit.
+      Meter builds from hits you land: spend 50 on <kbd>B</kbd> to burst out of a combo, or all 100 on <kbd>G</kbd> for the super, which cancels out of any confirmed hit.
+    </div>
+  </div>
+  <script type="module" src="/public/client.js"></script>
+</body>
+</html>

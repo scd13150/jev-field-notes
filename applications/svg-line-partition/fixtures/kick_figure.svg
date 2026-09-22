@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Line-art fixture: a kicking figure, built so that *line-art occlusion cues*
+  exist. A stroke that is drawn in two pieces with a gap where another stroke
+  crosses it is behind that stroke; a continuous crossing stroke is in front.
+  data-truth-behind names the occluder, so pair ground truth is derivable.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 300" width="380" height="300"
+     fill="none" stroke="#161616" stroke-width="2.5">
+
+  <rect id="border" x="6" y="6" width="368" height="288"
+        data-truth-layer="frame" data-truth-role="border_frame" data-truth-object="none"/>
+  <line id="floor" x1="18" y1="250" x2="362" y2="250"
+        data-truth-layer="mid" data-truth-role="ground_plane_line" data-truth-object="ground"/>
+
+  <ellipse id="shadow" cx="176" cy="256" rx="46" ry="9"
+           data-truth-layer="mid" data-truth-role="ground_plane_line" data-truth-object="shadow"/>
+
+  <g id="figure">
+    <circle id="head" cx="170" cy="70" r="18"
+            data-truth-layer="near" data-truth-role="object_outline" data-truth-object="head"/>
+    <line id="torso" x1="170" y1="88" x2="170" y2="162"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="torso"/>
+
+    <g id="far-arm" data-truth-behind="torso">
+      <line id="far-arm-a" x1="128" y1="120" x2="160" y2="110"
+            data-truth-layer="far" data-truth-role="object_outline" data-truth-object="arm"/>
+      <line id="far-arm-b" x1="180" y1="106" x2="214" y2="96"
+            data-truth-layer="far" data-truth-role="object_outline" data-truth-object="arm"/>
+    </g>
+
+    <path id="near-arm" d="M170,106 L146,140 L118,150"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="arm"/>
+    <path id="standing-leg" d="M170,162 L172,222 L176,250"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="leg"/>
+    <path id="kicking-leg" d="M170,162 L214,196 L250,190"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="leg"/>
+  </g>
+
+  <circle id="ball" cx="266" cy="184" r="16"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="ball"/>
+
+  <g id="motion-trail">
+    <path id="trail-1" d="M236,232 q10,-6 20,-2" data-truth-layer="mid" data-truth-role="repeated_texture" data-truth-object="trail"/>
+    <path id="trail-2" d="M244,244 q10,-6 20,-2" data-truth-layer="mid" data-truth-role="repeated_texture" data-truth-object="trail"/>
+    <path id="trail-3" d="M254,254 q10,-6 20,-2" data-truth-layer="mid" data-truth-role="repeated_texture" data-truth-object="trail"/>
+  </g>
+</svg>

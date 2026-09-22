@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="300" viewBox="0 0 260 300">
+  <!-- A stick figure with its drawing traces kept.
+
+       Document order IS the pen order: the artist drew a construction axis
+       first, then the figure from the head down, then the decorative passes
+       (hair, scarf, folds), then the ground line, then a sparkle added later.
+       `data-t` is the pen-down time in milliseconds.
+
+       Everything is flat on purpose - no <g> nesting anywhere in this file, so
+       nothing about hierarchy or belonging can be read off the file structure.
+       Part, layer and motion truth lives in data-truth-*, which the serializer
+       strips before anything reaches the model.
+
+       Left/right are the viewer's left/right. -->
+  <g fill="none" stroke="#1b1b1b" stroke-width="2" stroke-linecap="round">
+    <path id="guide-axis"  data-t="0"    data-truth-part="none"    data-truth-layer="guide"     data-truth-motion="none"   d="M130,12 L130,288"/>
+    <circle id="head"      data-t="640"  data-truth-part="head"    data-truth-layer="body"      data-truth-motion="head"   cx="130" cy="55" r="25"/>
+    <path id="ear-l"       data-t="1180" data-truth-part="head"    data-truth-layer="detail"    data-truth-motion="head"   d="M110,52 q5,-7 10,0"/>
+    <path id="mouth"       data-t="1520" data-truth-part="head"    data-truth-layer="detail"    data-truth-motion="head"   d="M120,66 q10,7 20,0"/>
+    <path id="torso"       data-t="2050" data-truth-part="torso"   data-truth-layer="body"      data-truth-motion="torso"  d="M130,80 L130,178"/>
+    <path id="arm-l"       data-t="2480" data-truth-part="arm-l"   data-truth-layer="body"      data-truth-motion="arm-l"  d="M130,100 L96,138"/>
+    <path id="hand-l"      data-t="2900" data-truth-part="arm-l"   data-truth-layer="body"      data-truth-motion="arm-l"  d="M96,138 l-8,6 l6,7"/>
+    <path id="arm-r"       data-t="3300" data-truth-part="arm-r"   data-truth-layer="body"      data-truth-motion="arm-r"  d="M130,100 L166,132"/>
+    <path id="hand-r"      data-t="3700" data-truth-part="arm-r"   data-truth-layer="body"      data-truth-motion="arm-r"  d="M166,132 l9,5 l-5,8"/>
+    <path id="leg-l"       data-t="4100" data-truth-part="leg-l"   data-truth-layer="body"      data-truth-motion="leg-l"  d="M130,178 L104,240"/>
+    <path id="leg-r"       data-t="4500" data-truth-part="leg-r"   data-truth-layer="body"      data-truth-motion="leg-r"  d="M130,178 L158,242"/>
+    <path id="foot-l"      data-t="4850" data-truth-part="leg-l"   data-truth-layer="detail"    data-truth-motion="leg-l"  d="M104,240 l-12,4"/>
+    <path id="foot-r"      data-t="5200" data-truth-part="leg-r"   data-truth-layer="detail"    data-truth-motion="leg-r"  d="M158,242 l13,4"/>
+    <path id="hair-1"      data-t="5700" data-truth-part="hair"    data-truth-layer="decor"     data-truth-motion="head"   d="M120,32 q6,-14 14,-16"/>
+    <path id="hair-2"      data-t="6000" data-truth-part="hair"    data-truth-layer="decor"     data-truth-motion="head"   d="M130,30 q2,-15 10,-19"/>
+    <path id="hair-3"      data-t="6300" data-truth-part="hair"    data-truth-layer="decor"     data-truth-motion="head"   d="M141,33 q0,-12 8,-15"/>
+    <path id="scarf"       data-t="6900" data-truth-part="scarf"   data-truth-layer="decor"     data-truth-motion="torso"  d="M112,86 q18,10 36,2 q6,10 -2,16"/>
+    <path id="shirt-fold-1" data-t="7300" data-truth-part="torso"  data-truth-layer="detail"    data-truth-motion="torso"  d="M124,120 q6,8 2,16"/>
+    <path id="shirt-fold-2" data-t="7600" data-truth-part="torso"  data-truth-layer="detail"    data-truth-motion="torso"  d="M136,128 q-5,9 -1,17"/>
+    <path id="ground"      data-t="8100" data-truth-part="ground"  data-truth-layer="backdrop"  data-truth-motion="none"   d="M10,252 L250,252"/>
+    <path id="sparkle"     data-t="8600" data-truth-part="sparkle" data-truth-layer="decor"     data-truth-motion="none"   d="M222,44 l0,14 M215,51 l14,0"/>
+  </g>
+</svg>

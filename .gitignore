@@ -1,0 +1,39 @@
+# Secrets — never commit these
+.env
+.env.*
+!.env.example
+*.key
+secrets.json
+apikey_*
+typesafe*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Local run artifacts
+*.log
+spar-*.json
+out/
+outputs/
+
+# Results are committed as evidence, EXCEPT caches and raw per-call dumps
+# (those disclose prompt design at full volume and are regenerable).
+results/**
+!results/*.md
+!results/*.json
+!results/*.html
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

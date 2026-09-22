@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pure-geometry fixture: anonymous ids, no scene meaning. Nothing here can be
+  answered by reading a name, so any correct answer has to come from numbers.
+
+  data-truth-group uses opaque labels (g-frame, g-nest, ...). They are never
+  spoken to the model as a per-element vocabulary, because an unrecognisable
+  cluster label cannot be chosen from geometry: grouping here is measured from
+  the pairwise "do these belong to one thing" judgments instead.
+
+  Group nesting deliberately DISAGREES with geometric enclosure (g-d holds two
+  diagonals that sit in different nesting levels), which separates the two
+  readings of hierarchy: authored DOM depth versus spatial enclosure.
+
+  layer / role / enclosure depth are computed by the geometry oracle.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" width="360" height="300"
+     fill="none" stroke="#202020" stroke-width="1.6">
+
+  <rect id="n-01" x="8" y="8" width="344" height="284" data-truth-group="g-frame"/>
+
+  <g id="ga">
+    <circle id="n-02" cx="150" cy="150" r="108" data-truth-group="g-nest"/>
+    <g id="gb">
+      <rect id="n-03" x="76" y="80" width="150" height="140" data-truth-group="g-nest"/>
+      <circle id="n-04" cx="150" cy="150" r="52" data-truth-group="g-nest"/>
+      <g id="gc">
+        <rect id="n-05" x="126" y="126" width="48" height="48"
+              transform="rotate(18 150 150)" data-truth-group="g-nest"/>
+      </g>
+    </g>
+  </g>
+
+  <circle id="n-06" cx="286" cy="76" r="40" data-truth-group="g-twin"/>
+  <circle id="n-07" cx="316" cy="112" r="40" data-truth-group="g-twin"/>
+
+  <g id="gd">
+    <line id="n-08" x1="20" y1="284" x2="340" y2="20" data-truth-group="g-cross"/>
+    <line id="n-09" x1="20" y1="20" x2="340" y2="284" data-truth-group="g-cross"/>
+  </g>
+
+  <g id="ge">
+    <line id="n-10" x1="252" y1="204" x2="288" y2="186" data-truth-group="g-hatch"/>
+    <line id="n-11" x1="262" y1="222" x2="298" y2="204" data-truth-group="g-hatch"/>
+    <line id="n-12" x1="272" y1="240" x2="308" y2="222" data-truth-group="g-hatch"/>
+    <line id="n-13" x1="282" y1="258" x2="318" y2="240" data-truth-group="g-hatch"/>
+  </g>
+
+  <g id="gf">
+    <circle id="n-14" cx="66" cy="52" r="14" data-truth-group="g-rings"/>
+    <circle id="n-15" cx="66" cy="52" r="26" data-truth-group="g-rings"/>
+    <circle id="n-16" cx="66" cy="52" r="38" data-truth-group="g-rings"/>
+  </g>
+
+  <path id="n-17" d="M196,44 C226,58 214,86 244,96 C274,106 262,132 292,144"
+        data-truth-group="g-wavy"/>
+  <polyline id="n-18" points="40,150 40,190 90,190 90,150" data-truth-group="g-bracket"/>
+  <line id="n-19" x1="65" y1="150" x2="65" y2="190" data-truth-group="g-bracket"/>
+  <path id="n-20" d="M120,268 q22,-26 44,0 q22,26 44,0" data-truth-group="g-bump"/>
+  <line id="n-21" x1="20" y1="284" x2="340" y2="284" data-truth-group="g-base"/>
+</svg>

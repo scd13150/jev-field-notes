@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Line-art fixture: a house scene built from nested groups.
+  Ground truth lives in data-truth-* attributes. The serializer strips every
+  attribute whose name starts with "data-truth", so Jev never sees a label.
+
+  Truth vocabulary
+    layer : frame | far | mid | near
+    role  : object_outline | interior_detail | repeated_texture
+            | ground_plane_line | border_frame
+    object: scene vocabulary, or "none"
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300"
+     fill="none" stroke="#1b1b1b" stroke-width="2">
+
+  <g id="frame">
+    <rect id="border" x="6" y="6" width="388" height="288"
+          data-truth-layer="frame" data-truth-role="border_frame" data-truth-object="none"/>
+  </g>
+
+  <g id="sky">
+    <circle id="sun-disc" cx="330" cy="56" r="26"
+            data-truth-layer="far" data-truth-role="object_outline" data-truth-object="sun"/>
+    <g id="sun-rays">
+      <line id="ray-1" x1="330" y1="18" x2="330" y2="6" data-truth-layer="far" data-truth-role="repeated_texture" data-truth-object="sun"/>
+      <line id="ray-2" x1="358" y1="28" x2="367" y2="19" data-truth-layer="far" data-truth-role="repeated_texture" data-truth-object="sun"/>
+      <line id="ray-3" x1="368" y1="56" x2="380" y2="56" data-truth-layer="far" data-truth-role="repeated_texture" data-truth-object="sun"/>
+      <line id="ray-4" x1="292" y1="28" x2="283" y2="19" data-truth-layer="far" data-truth-role="repeated_texture" data-truth-object="sun"/>
+    </g>
+    <path id="cloud-a" d="M52,86 q8,-20 28,-14 q6,-18 28,-12 q22,-4 24,16 q16,2 8,18 l-88,0 q-12,-2 -8,-8 z"
+          data-truth-layer="far" data-truth-role="object_outline" data-truth-object="cloud"/>
+    <path id="cloud-b" d="M150,54 q7,-16 24,-11 q6,-14 24,-9 q18,-3 19,13 q13,2 6,14 l-73,0 q-10,-1 -6,-7 z"
+          data-truth-layer="far" data-truth-role="object_outline" data-truth-object="cloud"/>
+    <path id="bird-1" d="M186,104 q11,-9 22,0 q11,-9 22,0"
+          data-truth-layer="far" data-truth-role="object_outline" data-truth-object="bird"/>
+    <path id="bird-2" d="M236,86 q8,-7 16,0 q8,-7 16,0"
+          data-truth-layer="far" data-truth-role="object_outline" data-truth-object="bird"/>
+  </g>
+
+  <g id="hills">
+    <path id="hill-far" d="M6,200 C80,150 140,172 200,196 C262,168 330,182 394,206"
+          data-truth-layer="far" data-truth-role="ground_plane_line" data-truth-object="hill"/>
+    <path id="hill-near" d="M6,228 C70,192 130,216 196,226 C262,208 330,222 394,232"
+          data-truth-layer="mid" data-truth-role="ground_plane_line" data-truth-object="hill"/>
+  </g>
+
+  <g id="ground">
+    <line id="horizon" x1="6" y1="250" x2="394" y2="250"
+          data-truth-layer="mid" data-truth-role="ground_plane_line" data-truth-object="ground"/>
+    <g id="ground-hatch">
+      <line id="hatch-1" x1="40" y1="268" x2="62" y2="262" data-truth-layer="mid" data-truth-role="repeated_texture" data-truth-object="ground"/>
+      <line id="hatch-2" x1="96" y1="278" x2="118" y2="272" data-truth-layer="mid" data-truth-role="repeated_texture" data-truth-object="ground"/>
+      <line id="hatch-3" x1="286" y1="272" x2="308" y2="266" data-truth-layer="mid" data-truth-role="repeated_texture" data-truth-object="ground"/>
+      <line id="hatch-4" x1="336" y1="282" x2="358" y2="276" data-truth-layer="mid" data-truth-role="repeated_texture" data-truth-object="ground"/>
+    </g>
+  </g>
+
+  <g id="house">
+    <path id="wall" d="M120,250 L120,152 L242,152 L242,250 Z"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="house"/>
+    <path id="roof" d="M104,154 L181,96 L258,154 Z"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="house"/>
+    <path id="chimney" d="M214,122 L214,100 L230,100 L230,136"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="house"/>
+    <rect id="door" x="140" y="198" width="34" height="52"
+          data-truth-layer="near" data-truth-role="interior_detail" data-truth-object="door"/>
+    <g id="window">
+      <rect id="window-frame" x="198" y="176" width="32" height="30"
+            data-truth-layer="near" data-truth-role="interior_detail" data-truth-object="window"/>
+      <line id="mullion-v" x1="214" y1="176" x2="214" y2="206"
+            data-truth-layer="near" data-truth-role="interior_detail" data-truth-object="window"/>
+      <line id="mullion-h" x1="198" y1="191" x2="230" y2="191"
+            data-truth-layer="near" data-truth-role="interior_detail" data-truth-object="window"/>
+    </g>
+  </g>
+
+  <g id="tree">
+    <path id="trunk" d="M300,250 L300,206 M292,222 L300,214"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="tree"/>
+    <circle id="canopy" cx="300" cy="182" r="30"
+            data-truth-layer="near" data-truth-role="object_outline" data-truth-object="tree"/>
+  </g>
+
+  <g id="fence">
+    <line id="rail-top" x1="10" y1="256" x2="116" y2="256"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="fence"/>
+    <line id="rail-low" x1="10" y1="272" x2="116" y2="272"
+          data-truth-layer="near" data-truth-role="object_outline" data-truth-object="fence"/>
+    <g id="pickets">
+      <line id="picket-1" x1="18" y1="246" x2="18" y2="288" data-truth-layer="near" data-truth-role="repeated_texture" data-truth-object="fence"/>
+      <line id="picket-2" x1="44" y1="246" x2="44" y2="288" data-truth-layer="near" data-truth-role="repeated_texture" data-truth-object="fence"/>
+      <line id="picket-3" x1="70" y1="246" x2="70" y2="288" data-truth-layer="near" data-truth-role="repeated_texture" data-truth-object="fence"/>
+      <line id="picket-4" x1="96" y1="246" x2="96" y2="288" data-truth-layer="near" data-truth-role="repeated_texture" data-truth-object="fence"/>
+    </g>
+  </g>
+</svg>

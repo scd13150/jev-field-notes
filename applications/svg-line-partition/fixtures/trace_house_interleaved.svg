@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="260" viewBox="0 0 340 260">
+  <!-- A house drawn the way people actually draw: the order jumps between
+       parts. Fence posts are interrupted by door and roof work, roof shingles
+       land between window strokes. "Strokes drawn next to each other belong
+       together" is therefore wrong on this sheet, which is the point: a model
+       that only exploits contiguity gets measured as such.
+
+       Document order = pen order, `data-t` = milliseconds. Flat file: no <g>
+       nesting carries any structural information. Decorative open strokes
+       (shingles, smoke, grass, sun spokes) have no closure to lean on. -->
+  <g fill="none" stroke="#223" stroke-width="2" stroke-linecap="round">
+    <path id="wall-front"   data-t="0"    data-truth-part="wall"    data-truth-layer="body"     data-truth-motion="wall"   d="M20,110 L150,110 L150,210 L20,210 Z"/>
+    <path id="roof"         data-t="420"  data-truth-part="roof"    data-truth-layer="body"     data-truth-motion="roof"   d="M12,112 L85,58 L158,112 Z"/>
+    <rect id="door-frame"   data-t="900"  data-truth-part="door"    data-truth-layer="body"     data-truth-motion="door"   x="95" y="140" width="45" height="70"/>
+    <path id="fence-post-1" data-t="1250" data-truth-part="fence"   data-truth-layer="body"     data-truth-motion="fence"  d="M180,160 L180,205"/>
+    <rect id="door-panel"   data-t="1600" data-truth-part="door"    data-truth-layer="detail"   data-truth-motion="door"   x="102" y="148" width="31" height="55"/>
+    <path id="shingle-1"    data-t="1950" data-truth-part="roof"    data-truth-layer="decor"    data-truth-motion="roof"   d="M40,96 L130,96"/>
+    <path id="fence-post-2" data-t="2300" data-truth-part="fence"   data-truth-layer="body"     data-truth-motion="fence"  d="M200,160 L200,205"/>
+    <rect id="window-frame" data-t="2650" data-truth-part="window"  data-truth-layer="body"     data-truth-motion="window" x="40" y="140" width="34" height="34"/>
+    <path id="shingle-2"    data-t="3000" data-truth-part="roof"    data-truth-layer="decor"    data-truth-motion="roof"   d="M60,82 L110,82"/>
+    <path id="mullion-v"    data-t="3350" data-truth-part="window"  data-truth-layer="detail"   data-truth-motion="window" d="M57,140 L57,174"/>
+    <path id="fence-rail"   data-t="3700" data-truth-part="fence"   data-truth-layer="body"     data-truth-motion="fence"  d="M172,178 L246,178"/>
+    <rect id="chimney"      data-t="4050" data-truth-part="chimney" data-truth-layer="body"     data-truth-motion="chimney" x="112" y="64" width="18" height="30"/>
+    <path id="mullion-h"    data-t="4400" data-truth-part="window"  data-truth-layer="detail"   data-truth-motion="window" d="M40,157 L74,157"/>
+    <path id="smoke-1"      data-t="4750" data-truth-part="smoke"   data-truth-layer="decor"    data-truth-motion="none"   d="M121,58 q-10,-10 0,-18 q10,-8 2,-16"/>
+    <path id="fence-post-3" data-t="5100" data-truth-part="fence"   data-truth-layer="body"     data-truth-motion="fence"  d="M222,160 L222,205"/>
+    <path id="smoke-2"      data-t="5450" data-truth-part="smoke"   data-truth-layer="decor"    data-truth-motion="none"   d="M133,52 q-8,-8 0,-14"/>
+    <circle id="door-knob"  data-t="5800" data-truth-part="door"    data-truth-layer="detail"   data-truth-motion="door"   cx="128" cy="176" r="3"/>
+    <path id="grass-1"      data-t="6150" data-truth-part="grass"   data-truth-layer="decor"    data-truth-motion="none"   d="M158,205 l4,-9 l4,9"/>
+    <path id="ground"       data-t="6500" data-truth-part="ground"  data-truth-layer="backdrop" data-truth-motion="none"   d="M10,205 L330,205"/>
+    <circle id="sun"        data-t="6850" data-truth-part="sun"     data-truth-layer="backdrop" data-truth-motion="none"   cx="300" cy="45" r="18"/>
+    <path id="sun-rays"     data-t="7200" data-truth-part="sun"     data-truth-layer="decor"    data-truth-motion="none"   d="M300,18 l0,-8 M300,72 l0,8 M273,45 l-8,0 M327,45 l8,0"/>
+    <path id="wall-crack"   data-t="7550" data-truth-part="wall"    data-truth-layer="detail"   data-truth-motion="wall"   d="M100,190 l-4,-12 l5,-9"/>
+    <path id="shingle-3"    data-t="7900" data-truth-part="roof"    data-truth-layer="decor"    data-truth-motion="roof"   d="M50,89 L100,89"/>
+  </g>
+</svg>

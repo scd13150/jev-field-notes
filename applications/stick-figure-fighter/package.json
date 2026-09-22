@@ -1,0 +1,15 @@
+{
+  "name": "stick-figure-jev",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Stick-figure fighting game where the AI opponent (and the production-stage dual-JEV sparring mode) is driven by TypeSafe Jev System One judgments.",
+  "scripts": {
+    "test": "node --test",
+    "probe": "node scripts/probe.mjs",
+    "server": "node server/server.js",
+    "start": "node server/server.js",
+    "spar": "node scripts/spar.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

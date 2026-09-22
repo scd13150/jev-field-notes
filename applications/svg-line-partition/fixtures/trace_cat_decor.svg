@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <!-- A cat made mostly of decoration: whiskers and fur hatching are open
+       strokes that carry no outline information, and the fur marks are
+       near-identical short lines that belong to *different* parts depending on
+       which closed outline they fall inside (head vs body). The pen order
+       alternates whiskers with fur, so consecutive strokes are usually NOT the
+       same part, and every fur stroke looks like every other fur stroke.
+
+       Document order = pen order, `data-t` = ms, no <g> nesting of
+       information. -->
+  <g fill="none" stroke="#231f20" stroke-width="2" stroke-linecap="round">
+    <path id="body-outline" data-t="0"    data-truth-part="body"      data-truth-layer="body"   data-truth-motion="body"   d="M150,105 C200,100 235,120 238,150 C240,180 205,196 160,196 C120,196 100,175 104,148 C108,122 122,108 150,105 Z"/>
+    <circle id="head"       data-t="500"  data-truth-part="head"      data-truth-layer="body"   data-truth-motion="head"   cx="92" cy="92" r="34"/>
+    <path id="ear-left"     data-t="950"  data-truth-part="ear-left"  data-truth-layer="body"   data-truth-motion="head"   d="M70,66 L76,42 L94,60 Z"/>
+    <path id="ear-right"    data-t="1300" data-truth-part="ear-right" data-truth-layer="body"   data-truth-motion="head"   d="M100,58 L118,40 L124,66 Z"/>
+    <path id="whisker-l1"   data-t="1700" data-truth-part="whiskers"  data-truth-layer="decor"  data-truth-motion="head"   d="M42,88 L62,92"/>
+    <path id="fur-1"        data-t="2050" data-truth-part="fur"       data-truth-layer="decor"  data-truth-motion="body"   d="M150,140 L168,148"/>
+    <path id="whisker-r1"   data-t="2400" data-truth-part="whiskers"  data-truth-layer="decor"  data-truth-motion="head"   d="M122,92 L142,88"/>
+    <path id="fur-2"        data-t="2750" data-truth-part="fur"       data-truth-layer="decor"  data-truth-motion="head"   d="M84,104 L102,110"/>
+    <path id="whisker-l2"   data-t="3100" data-truth-part="whiskers"  data-truth-layer="decor"  data-truth-motion="head"   d="M40,100 L60,101"/>
+    <path id="fur-3"        data-t="3450" data-truth-part="fur"       data-truth-layer="decor"  data-truth-motion="body"   d="M170,158 L188,165"/>
+    <path id="whisker-r2"   data-t="3800" data-truth-part="whiskers"  data-truth-layer="decor"  data-truth-motion="head"   d="M124,102 L144,99"/>
+    <path id="tail"         data-t="4150" data-truth-part="tail"      data-truth-layer="body"   data-truth-motion="tail"   d="M236,148 q32,-6 32,-34 q0,-14 -14,-14"/>
+    <path id="fur-4"        data-t="4500" data-truth-part="fur"       data-truth-layer="decor"  data-truth-motion="head"   d="M72,88 L90,92"/>
+    <path id="leg-1"        data-t="4850" data-truth-part="legs"      data-truth-layer="body"   data-truth-motion="legs"   d="M130,196 L128,222"/>
+    <path id="leg-2"        data-t="5200" data-truth-part="legs"      data-truth-layer="body"   data-truth-motion="legs"   d="M152,196 L150,222"/>
+    <path id="leg-3"        data-t="5500" data-truth-part="legs"      data-truth-layer="body"   data-truth-motion="legs"   d="M180,196 L182,222"/>
+    <path id="leg-4"        data-t="5800" data-truth-part="legs"      data-truth-layer="body"   data-truth-motion="legs"   d="M204,192 L208,220"/>
+    <circle id="eye-left"   data-t="6150" data-truth-part="head"      data-truth-layer="detail" data-truth-motion="head"   cx="82" cy="86" r="3"/>
+    <circle id="eye-right"  data-t="6450" data-truth-part="head"      data-truth-layer="detail" data-truth-motion="head"   cx="104" cy="86" r="3"/>
+    <path id="fur-5"        data-t="6800" data-truth-part="fur"       data-truth-layer="decor"  data-truth-motion="body"   d="M192,168 L208,175"/>
+    <path id="fly-body"     data-t="7150" data-truth-part="fly"       data-truth-layer="body"   data-truth-motion="fly"    d="M268,58 q7,5 14,0"/>
+    <path id="fly-wing"     data-t="7450" data-truth-part="fly"       data-truth-layer="decor"  data-truth-motion="fly"    d="M272,56 q4,-9 11,-5"/>
+    <path id="ground-line"  data-t="7800" data-truth-part="ground"    data-truth-layer="backdrop" data-truth-motion="none" d="M20,224 L300,224"/>
+  </g>
+</svg>

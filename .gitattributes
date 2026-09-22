@@ -1,0 +1,13 @@
+# Normalize line endings so a Windows clone and a Linux clone produce the same diff.
+* text=auto eol=lf
+
+# Binary and generated artifacts must never be line-ending-converted.
+*.wav  binary
+*.png  binary
+*.jpg  binary
+*.svg  text eol=lf
+*.json text eol=lf
+
+# Generated evidence artifacts: keep them byte-stable, never diff-normalized.
+applications/svg-line-partition/results/viewer.html -text -diff
+applications/svg-line-partition/results/summary.json -text -diff

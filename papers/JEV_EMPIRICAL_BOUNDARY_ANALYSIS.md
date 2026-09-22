@@ -446,6 +446,62 @@ to catch them.
 
 ---
 
+### Addendum — a separate experiment: option-space pruning and summary granularity
+
+**This addendum is not part of the study above and its results are not pooled with it.** It comes
+from a different project with a different workload, sample size and author: an experimental CDP
+browser controller that indexed a live page into a tree and asked Jev to walk it down to a target
+element (55 requests / 282,370 input tokens / **$0.0119**, model pinned to `jev-1.13.0`, ground-truth
+selectors used only for scoring and never placed in the state). It is included because its two
+findings point in the same direction as T11 and the SVG probe, from a third domain — and because one
+of them argues against a documented TypeSafe recommendation.
+
+**Option-space pruning degraded the answer.** On `ithome-search`, a 20-candidate question produced
+the correct choice `seg#2` at confidence 0.54. The same question with a predicate reducing the pool
+to **3 candidates** returned: `none_of_these` 0.37, *view-all* 0.31, correct answer 0.31 — and
+selected `none`. Across the run, first-question hit rate was **62.5% (5/8) without predicates and
+37.5% (3/8) with them**; in the eight cases the predicate *added one outright wrong choice* that was
+not wrong without it. Of nine predicate applications, four genuinely narrowed the view, five were
+discarded by an empty-set / below-K-minimum fallback ("half a predicate is not worth writing"), and
+one narrowed the correct answer out. Where narrowing worked, accuracy did not change.
+
+So pruning is not merely neutral here — it moved probability mass onto the exit option. That runs
+against the intuition that fewer options make the choice easier, and it is consistent with TypeSafe's
+own SDK guidance to send the **full** candidate list rather than a shortlist. The distinction worth
+keeping: *a full list with good per-entry evidence* and *a pruned shortlist with the same per-entry
+evidence* are not interchangeable, and this workload measured the second as worse.
+
+**Abstraction granularity broke the pipeline, not the model.** Summaries at the *segment* level
+aggregated the text of the whole subtree beneath them; summaries at the *node* level carried only the
+text that element draws itself, plus a count (`holds: reachable 34 / drawn: no text`). Consequence:
+the first question (pick the segment) hit **5/8**, including confidence **0.98 / 0.99** on the one
+case where the target's own text was aggregated up. The second question (pick the node inside it)
+then answered `none_of_these` at 0.57–0.81 in **all five** cases where the segment had been correct —
+the target node was located **0/8** overall. The clearest instance: a button that draws the word
+"Star" itself, where the segment summary captured "Star" and the intermediate node was an empty
+container, so the evidence that existed one level up did not exist one level down.
+
+**The option cap binds, not the character cap.** Across 24 sampled pages, 0% hit the character or 32k
+limit first and **100% hit the 255-option cap first**; 4.2% have more than 255 siblings at some
+level (max 528). Relatedly, one `Noul` question per entry costs roughly 520 characters per entry —
+401 entries would need 209,000 characters against about 10,000 accepted — which makes `Choice` the
+only workable primitive for indexing. That is a clean design constraint, and it is the opposite of
+what a `Noul`-per-item design assumes.
+
+Stated limits, all from the report's own caveats and not softened here: **n = 8 cases**, one run per
+condition, single temperature sample (though one identical request sent 12 times returned the same
+answer all 12 times, median 369 ms / P95 910 ms); **3 of the 8 cases had a structural minimum of
+8–13 questions against an observation window capped at 6, and those three are not counted against the
+model**; and the implementation was internally inconsistent in a way that partly explains the
+predicate result — predicates were evaluated against untruncated text while summaries exposed only
+the first 200 characters, so a predicate could hit an entry Jev could not see. That is a bug in the
+harness, and it means the pruning finding is **suggestive rather than conclusive**.
+
+The tool itself did not reach its design goal and is not published. The measurement is what is worth
+keeping.
+
+---
+
 ## 5. Measured boundaries
 
 Each of these is a measurement, not an impression.

@@ -23,6 +23,8 @@ marked **cost** are the places where money was spent to learn something a free b
 | 12 | **Evidence moves the distribution, not necessarily the action.** | Adding the reference graph raised confidence in **22/23** units (mean +0.147, max +0.61) and tightened the rank correlation from −0.46 to −0.72 — while only **2** units changed tier and abstentions went 3 → 0. A saturated action list is *less* informative than one with more abstentions. |
 | 13 | **Without truth, only a ranking and a public policy can ship — and a borrowed floor may release nothing.** | All 12 type-arm units sat below the borrowed 0.60 confidence floor (four at exactly 0.00, max 0.513) → zero auto-actions. Yet 11/12 held the same tier across three samples. Argmax vs nearest-tier routing agreed only **0.79**, so "one distribution, two routings" is itself a disagreement rate that must be published. |
 | 14 | **It does not hold the evidence responsible for being true — reproduced in a second, unrelated domain.** | Permuting coordinates between elements in an SVG probe dropped region accuracy from 0.857 / 0.812 / 0.571 to **0.048 / 0.219 / 0.000** (all below their own majority baselines) while confidence moved only 0.868 / 0.782 / 0.701 → **0.842 / 0.788 / 0.638**. Same signature as #9, different domain: **a coherent falsehood in the state is consumed as eagerly as a truth.** The defence is upstream validation, never a threshold. |
+| 15 | **A pruned shortlist can be worse than the full list.** | A separate browser-agent experiment cut a 20-candidate question down to **3** by predicate: the answer went from correct at **0.54** to `none_of_these` at 0.37 with the correct option reduced to 0.31. First-question hit rate fell **62.5% → 37.5%** (n=8; the predicate also introduced one outright wrong choice that had not been wrong without it). Same shape as #9 and #10 — the failure is in the option space, not the model — but here the *remedy you would reach for first* is what caused it. |
+| 16 | **Inconsistent summary granularity between levels breaks a hierarchy.** | In the same experiment, segment-level summaries aggregated whole-subtree text while node-level summaries carried only the element's own text: the first question hit **5/8** (including confidence 0.98/0.99 where the target's own text was aggregated up), and the very next question — one level down, same page, same state — answered `none_of_these` in **all five** cases the first had got right. Target located **0/8**. Evidence that exists one level up may simply not exist one level down. |
 
 ## What follows from these, in code
 
@@ -60,3 +62,16 @@ marked **cost** are the places where money was spent to learn something a free b
     upgrade as a compiler upgrade: full re-run plus diff.
 14. **Measure for degeneracy before spending.** If a constant predictor scores as well as the model,
     the question was wrong (§11 above), and no amount of threshold tuning fixes a wrong question.
+15. **Do not assume a shortlist helps — measure that too.** A separate experiment (addendum in
+    [Paper 2](../papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md)) cut a 20-candidate question to 3 by
+    predicate, and the answer went from correct at 0.54 to `none_of_these` at 0.37 with the correct
+    option at 0.31. First-question hit rate fell **62.5% → 37.5%**. This is the mirror image of rule
+    10: a shortlist *feels* like it should make the choice easier, and on the one workload that
+    measured it, it moved probability mass onto the exit option instead. Send the full list with good
+    per-entry evidence, or prove the shortlist beats it.
+16. **Keep summary granularity consistent across the levels of a hierarchy.** Summaries that aggregate
+    a whole subtree and summaries that carry only an element's own text are not interchangeable: the
+    first question in that same experiment hit **5/8**, and the very next question — one level down,
+    same page, same state — answered `none_of_these` in **all five** of the cases the first had got
+    right. Target located **0/8**. The pipeline broke on the difference between the two summary
+    levels, not on the model.

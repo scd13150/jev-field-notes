@@ -31,8 +31,8 @@ result was worse than doing nothing, and those cases are the most useful part of
 | **[Application 1](applications/stick-figure-fighter)** | 2D fighting game where the opponent's brain is six typed judgments per request | **in production** | `npm test`, `node scripts/spar.mjs --mock` || **[Application 2](applications/emotion-controlled-tts)** | Jev judgment → 8-D emotion vector → parametric TTS | **in production** | [`README`](applications/emotion-controlled-tts) |
 | **[Application 3](applications/svg-line-partition)** | Capability-ceiling probe: can it partition a drawing from text alone? | **under test** | `python -m src.selftest` |
 | **[Paper 1](papers/JEV_AS_A_TYPE_ADAPTER.md)** | Jev as a typed boundary between language and code | — | — |
-| **[Paper 2](papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md)** | 8,000 calls on a Unity Mono binary: what Jev is and is not | — | — |
-| **[Findings](docs/FINDINGS.md)** | The 14 falsifiable behaviours, with reproductions | — | — |
+| **[Paper 2](papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md)** | 8,000 calls on a Unity Mono binary: what Jev is and is not, plus an addendum from a third domain | — | — |
+| **[Findings](docs/FINDINGS.md)** | The 16 falsifiable behaviours, with reproductions | — | — |
 | **[Related work](docs/REFERENCES.md)** | Published companion project, official resources, and what is deliberately excluded | — | — |
 
 Three of these put Jev to work; the third deliberately tries to break it. That split is on purpose —
@@ -294,6 +294,16 @@ The study also produced thirteen reusable engineering rules — ablation hygiene
 be self-checked against a hand-computed example, why a cached answer is not a correct answer, why
 every "give it a few examples" task needs a nearest-neighbour baseline — collected in
 [`docs/FINDINGS.md`](docs/FINDINGS.md).
+
+It closes with an **addendum from a separate experiment**, clearly marked as not pooled with the
+study above: an experimental browser agent that asked Jev to walk a page hierarchy down to one
+element. Two findings there are worth the space. **Pruning the candidate list made the answer
+worse** — 20 options produced the correct choice at 0.54; the same question reduced to 3 produced
+`none_of_these` at 0.37 — which runs against the intuition that fewer options are easier, and
+independently matches TypeSafe's own advice to send the full list. And **inconsistent summary
+granularity between levels broke the pipeline**: the segment question hit 5/8, while the very next
+question one level down answered `none_of_these` in all five cases the first had got right. Sample
+size is small and the report says so; the finding is suggestive, not conclusive.
 
 ---
 

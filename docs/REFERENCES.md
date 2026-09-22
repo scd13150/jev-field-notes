@@ -47,13 +47,19 @@ Two details worth noting for anyone building on Jev in a browser:
 
 ## Not included, and why
 
-Two local projects are deliberately **not** in this repository.
+Three local projects are deliberately **not** in this repository.
 
 - One is an independent open-weights decision model that benchmarks itself against Jev, including
   comparisons where it comes out ahead on most axes. It is legitimate work and the comparisons are
   fair, but shipping it inside an application repository for the company that builds Jev would
   misrepresent the intent of this collection and invite the wrong reading of every measurement in it.
   It is published separately and is not a Jev application.
-- The other is the same reasoning at a smaller scale: several smaller experiments use Jev as one
-  component among many and would dilute the focus here. This repository is limited to work where Jev
-  is the subject.
+- An **experimental CDP browser agent** that asked Jev to walk a page hierarchy down to a single
+  element. It never reached its design goal and the code is not published — but its measurement run
+  was controlled and produced two reusable findings, which are documented as an addendum in
+  [Paper 2](../papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md) rather than as an application here. That is
+  the deliberate split: **keep the result, drop the dead tool.** Shipping an acknowledged dead end as
+  a portfolio piece dilutes the rest, while discarding a well-controlled negative result throws away
+  the part that was actually worth the money.
+- Several smaller experiments use Jev as one component among many and would dilute the focus here.
+  This repository is limited to work where Jev is the subject.

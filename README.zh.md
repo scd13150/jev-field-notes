@@ -119,8 +119,6 @@ python -m src.analyze
 
 **想先读一篇完整的中文文章?** 见 [`docs/zh/BOUNDARY_ANALYSIS.zh.md`](docs/zh/BOUNDARY_ANALYSIS.zh.md) —— 从「为什么要测它不行」讲到七条可搬走的原则。
 
-**在做酒馆插件?** 见 [`docs/zh/WHY_JEV_FITS_SILLYTAVERN.zh.md`](docs/zh/WHY_JEV_FITS_SILLYTAVERN.zh.md) —— 为什么 Jev 特别适合 SillyTavern,以及还没被做的七个地方。
-
 ---
 
 ## 仓库结构

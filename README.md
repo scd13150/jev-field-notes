@@ -316,3 +316,15 @@ Chinese originals and the older Chinese write-ups are preserved under
 ## License
 
 Code: MIT (see [`LICENSE`](LICENSE)). Prose and measurements: CC BY 4.0.
+
+---
+
+## Aside
+
+Every number in this repository came out of a real API budget. The study in
+[Paper 2](papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md) ran 8,000 calls and 17.2 M input tokens for
+**$0.72**; the fight in [Application 1](applications/stick-figure-fighter) is billed per judgment.
+At $42/Btok with output free that is cheap, which is the whole point — but it is not free, so:
+
+<sub>→ [`assets/memes/`](assets/memes) — shared at the TypeSafe team's request.</sub>
+

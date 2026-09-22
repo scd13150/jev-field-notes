@@ -1,0 +1,53 @@
+name: checks
+
+# Runs the two offline harnesses. Neither needs an API key, a network fetch, or a
+# package install (the SVG probe is standard-library only and the game has zero
+# runtime dependencies), so this is fast and costs nothing.
+#
+# Deliberately NOT run here:
+#   * applications/emotion-controlled-tts -- needs the Jev API and a local IndexTTS
+#     2.5 checkout (torch + checkpoints). Not reproducible in CI by design.
+#   * `python -m src.analyze` -- it regenerates results/report.md from the on-disk
+#     Jev response cache, which is not committed (it would disclose the full prompt
+#     design at volume). On a fresh checkout it therefore writes a SHORTER report
+#     than the committed one. The committed report is the record; regenerating it in
+#     CI would produce a misleading diff rather than a useful check.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  engine-and-probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 52 cases, no network, no key. The engine rules are where the combat
+      # behaviour is pinned, so this is the load-bearing check.
+      - name: Fighting game -- 52 engine and decision tests
+        working-directory: applications/stick-figure-fighter
+        run: npm test
+
+      # Exercises the mock decider end to end and prints the ledger. The mock is
+      # deterministic and RNG-free, so the same command twice gives byte-identical
+      # output -- which is what makes a policy change falsifiable.
+      - name: Fighting game -- headless dual-brain ledger (offline)
+        working-directory: applications/stick-figure-fighter
+        run: node scripts/spar.mjs --mock --games 16 --seconds 30
+
+      # Parsing and geometry assertions: the gate that must pass before any Jev
+      # call is made, because Jev cannot tell whether its own input was correct.
+      - name: SVG probe -- parsing and geometry assertions
+        working-directory: applications/svg-line-partition
+        run: python -m src.selftest

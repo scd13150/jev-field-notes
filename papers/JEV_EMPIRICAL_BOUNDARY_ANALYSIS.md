@@ -2,12 +2,21 @@
 
 ### A case study in Unity Mono binary analysis, and in finding the line between a model and a truth table
 
-**Target:** *Next Girl Please* v1.4 — Unity **6000.3.10f1**, **Mono** backend, Windows x64
+**Target:** a shipped commercial title — Unity (recent LTS), **Mono** backend, Windows x64
 **Model:** `jev-1.13.0` (TypeSafe)
 **Scale:** 8,000+ API calls · 17,156,453 input tokens · **$0.7206** net spend ($42/Btok, output
 unbilled) · p50 **383 ms**, p90 **806 ms** · error rate **0.0%**
 
 ---
+
+> **Note on identifiers.** Every class, field, asset and script identifier below has been replaced
+> with a stable neutral alias, and the title itself is not named. The originals are left out
+> deliberately: the analysed work is adult-themed, so reproducing its identifiers would both reveal
+> its subject matter and make it trivially identifiable. Aliases preserve the original spelling and
+> **length**, so structural statements and every count remain exactly as measured — the aliasing
+> changes names only, never a number. The numbers were verified invariant against the
+> pre-sanitization text: 679 numeric tokens unchanged, the only differences being the removed engine
+> and title version strings.
 
 ## 0. Why this study exists, and how to read it
 
@@ -107,7 +116,7 @@ The single largest correction in the study was a metadata table error: `0x1D` wa
 when ECMA-335 II.23.1.16 is a *sparse* table (`0x17` is unassigned, so `0x18`=I, `0x19`=U,
 `0x1B`=FNPTR, `0x1C`=OBJECT, **`0x1D`=SZARRAY**, `0x1E`=MVAR). Every `T[]` field had been read as a
 generic parameter, consuming the following bytes: **1,635 of 78,621 fields had the wrong type** —
-`DialoguesCollection._dialogues` came out as the string `m18` instead of `DialogueData[]`. It was
+`ScriptsCollection._scripts` came out as the string `m18` instead of `ScriptData[]`. It was
 confirmed by checking the raw signature blob bytes directly, and after the fix the corrupt count went
 **1,635 → 0**.
 
@@ -226,7 +235,7 @@ names replaced with deceptive ones. Cost **351 calls / 617,392 tokens / $0.0259*
   correctly answered the narrower question and the axis collapsed from +0.79 to **+0.12**. Adding
   the real save-file evidence restored it to **+0.81 with no dependence on the name**.
 - **Some questions have no evidence in the artifact at all.** After grounding, `player_visible` kept
-  only +0.01 — leaderboard values are rendered by the Steam overlay, and there is no UI sink inside
+  only +0.01 — leaderboard values are rendered by the platform overlay, and there is no UI sink inside
   `Assembly-CSharp`. Its +0.83 "apparent understanding" was the name. **The honest response is to
   narrow the claim, not to raise the threshold.**
 
@@ -237,8 +246,8 @@ number" and "the model read the word `Score`."**
 ### T8 — Abstention as intelligence
 
 Of the 60 most central types, 21 were judged "the name is broader than the responsibility," including
-`ICurrentDayDataProvider` (score 1.12, confidence **0.00**), `ICurrentChecklistProvider` (1.08,
-**0.00**) and `ICurrentActressProvider` (0.98, **0.00**) — precisely the `*Provider` naming pattern
+`ICurrentStageDataProvider` (score 1.12, confidence **0.00**), `ICurrentChecklistProvider` (1.08,
+**0.00**) and `ICurrentActorProvider` (0.98, **0.00**) — precisely the `*Provider` naming pattern
 that had been independently flagged as suspicious.
 
 **Conclusion: in reverse engineering, "I cannot tell what this type does" is a hook location. It is
@@ -313,15 +322,15 @@ every story file's referrer.
 **First, what came free — and this is the real architectural result:**
 
 - All **158/158** ink files are referenced (zero dead files), by only 5 classes and **8 declared
-  slots**: `ActressAppearData.AppearPhrasesInk` (79), `ActressData.PersistentPhrasesInk` (36),
-  `ContextGalleryScope._dialogueDatas` (23), `ActressAppearData.AppearDialogue` (15),
-  `DayData.DayStartDialogue` (12), `DayData.DayStartMessages` (11),
-  `InteractiveAdultPhraseController._inkFile` (6), `DayData.DayEndDialogue` (3). A ninth slot,
-  `DialogueData.DialogueAsset`, is declared but never holds ink — and it becomes the trap below.
+  slots**: `ActorAppearData.AppearTermsInk` (79), `ActorData.PersistentTermsInk` (36),
+  `ContextSceneScope._scriptDatas` (23), `ActorAppearData.AppearScript` (15),
+  `StageData.StageStartDialogue` (12), `StageData.StageStartMessages` (11),
+  `InteractivePhraseController._inkFile` (6), `StageData.StageEndDialogue` (3). A ninth slot,
+  `ScriptData.ScriptAsset`, is declared but never holds ink — and it becomes the trap below.
 - The named Ink↔C# interface is remarkably narrow: of 1,012 knots, only **4** names appear in the
-  assembly's string constants (`greeting_phrases`, `idle_phrases`, `questions`, `polaroid`), each
-  across 79/79/79/32 files. The whole corpus contains 1 external function (`GetPlayerName`),
-  1 global variable (`playerName`) and 0 list definitions.
+  assembly's string constants (`greeting_terms`, `idle_terms`, `questions`, `snapshot`), each
+  across 79/79/79/32 files. The whole corpus contains 1 external function (`GetUserName`),
+  1 global variable (`userName`) and 0 list definitions.
 - **So "find the wiring by knot name" is a dead end** (the inventory is only 20% decidable, and every
   decidable case lands in the same cluster). The wiring is in the PPtrs, not the names.
 - The four non-overlapping knot vocabularies are a file-type fingerprint — classifying a story file
@@ -337,7 +346,7 @@ constant baseline = 0.52):
 | anon_few (slots shuffled to `Class_NN.Slot_MN`, same 8 examples) | 0.907 (136/150) | p ≈ 0 | 1.000 | **0.462** | 0.987 |
 | — control: **deterministic 1-NN** (knot-set Jaccard, same 8 examples, 0 calls) | **0.987** (2 errors) | — | — | — | — |
 
-- **The zero-shot arm placed 158/158 votes on the trap slot** `DialogueData.DialogueAsset`, and
+- **The zero-shot arm placed 158/158 votes on the trap slot** `ScriptData.ScriptAsset`, and
   confidently (top probability 0.65–0.84, mean p(true) 0.026) — for **0.000** accuracy. This is the
   cleanest instance in the study of **bias, not noise**: coverage truncation cannot rescue it, since
   accuracy is 0.00 at every coverage level. **Selective prediction defends against noise, not against
@@ -375,10 +384,10 @@ rather than a fitted threshold.
 **Error 1 — the ablation leaked a channel, which would have invalidated the whole comparison.** The
 first `no_folder` arm deleted only the `namespace` field, but every member signature and field
 declaration carries fully qualified type names
-(`void .ctor(GlorywallSystem.Core.GlorywallEventType,bool)`) — **the entire folder tree was still in
+(`void .ctor(BastionSystem.Core.BastionEventType,bool)`) — **the entire folder tree was still in
 the state.** The fix strips dot-qualified names too, and **proves the strip before spending money**:
 search the ablated JSON for `ns + "."` for all 106 namespaces and abort on a hit. (Naive substring
-matching produces false positives — `ActressesDatabase` contains a namespace word. That is not a leak.)
+matching produces false positives — `ActorsDatabase` contains a namespace word. That is not a leak.)
 
 **Error 2 — two arms shared one tier mapping, inverting a derived metric.** The `no_folder` arm has a
 two-tier ladder (tier 1 = "not one module"); the `full` arm has three (tier 2). A single `split_of()`
@@ -588,7 +597,7 @@ Reusable as-is:
 
 The original artifact index, mapping every number in this paper to the file that produced it and the
 command that regenerates it, is preserved verbatim in the Chinese source record
-([`../assets/zh/JEV_CAPABILITY_RECORD.md`](../assets/zh/JEV_CAPABILITY_RECORD.md), §7). It is kept in
+([`../assets/zh/JEV_CAPABILITY_RECORD.redacted.md`](../assets/zh/JEV_CAPABILITY_RECORD.redacted.md), §7). It is kept in
 full because the mapping from claim to artifact is the part most worth checking, and the commands
 reference a private working tree.
 

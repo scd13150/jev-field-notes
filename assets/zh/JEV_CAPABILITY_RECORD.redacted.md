@@ -1,6 +1,6 @@
 # Jev × Unity 游戏逆向：探索记录与能力证明
 
-对象：`Next Girl Please` v1.4（Unity **6000.3.10f1**，**Mono** 后端，Windows / target_platform 19）
+对象：某已发行商业作品（Unity 近期 LTS，**Mono** 后端，Windows x64）
 模型：`jev-1.13.0`（TypeSafe）
 记录时间：2026-09-19
 累计成本：`out/jev_calls.jsonl` 8000 次调用 / 17,156,453 input tokens / 记账 **$0.7206**（$42/Btok，
@@ -11,7 +11,7 @@ T10 $0.05082、T11 $0.18112、T12 $0.0293（348 次**新付**调用；按缓存�
 
 ## 0. 约束（全程有效）
 
-- 游戏目录 `D:/Downloads/Compressed/Next.Girl.Please.v1.4/` **只读**，从不写回。
+- 游戏目录 `D:/work/target-build/` **只读**，从不写回。
 - 只做理解/分析工具，**不涉及 DRM、许可、付费校验的任何绕过**。
 - API key 只存在于全局环境变量 `TYPESAFE_API_KEY`，不打印、不写日志、不入库。
 - `out/jev_calls.jsonl` 是多条并行 agent 共享的日志，因此**跨运行总量只能当趋势**；每次运行自己 `J.stats()` 的差值才是可信归属。
@@ -24,6 +24,12 @@ T10 $0.05082、T11 $0.18112、T12 $0.0293（348 次**新付**调用；按缓存�
 明确**不在**范围：Ink 剧情抽取、存档/数值深挖、mod 注入点。
 
 ---
+
+> **关于标识符的说明。** 下文中所有类名、字段名、资产名与脚本标识符均已替换为固定的中性别名，作品名称
+> 亦不公开。原文刻意不保留：被分析的作品是成人向题材，复现其标识符既会暴露题材，也会让作品被轻易反查
+> 出来。别名沿用原来的拼写与**长度**，因此全部结构性陈述与计数与实测完全一致 —— 改名只改名字，不动任何
+> 数字。数字已逐项与脱敏前文本核对：976 个数字 token 完全不变，仅被移除的引擎版本与作品版本号例外。
+
 
 ## 2. 探索经历（按发现顺序，包含走过的错路）
 
@@ -60,7 +66,7 @@ T10 $0.05082、T11 $0.18112、T12 $0.0293（348 次**新付**调用；按缓存�
 `0x17` 未分配，因此 I=`0x18`、U=`0x19`、FNPTR=`0x1B`、OBJECT=`0x1C`、**SZARRAY=`0x1D`**、MVAR=`0x1E`。
 
 后果：每个 `T[]` 字段都被读成泛型参数并吞掉后续字节。**168 个程序集、78,621 字段中 1,635 个字段的类型是坏的**，
-例如 `DialoguesCollection._dialogues` 变成字符串 `m18` 而不是 `DialogueData[]`。
+例如 `ScriptsCollection._scripts` 变成字符串 `m18` 而不是 `ScriptData[]`。
 可抓性来自一条硬事实：**MVAR 在字段签名里不可能出现**。判定直接对 blob 字节（`06 1D 12 84 F4`）验证，不靠转述规范。
 修复后复测：损坏字段 **1635 → 0**。
 
@@ -97,7 +103,7 @@ T10/T12 之后又假掉三处，本轮一并改在**生成器**里（`scripts/re
 `out/ink_wiring.json` + `out/ink_inventory.json` 读（8 个槽位直方图、158/158、16,606 个 PPtr、
 4/1012 个 knot 名、20% 可判），不再手抄。**顺带发现一个口径**：槽位直方图有两种数法——
 "每个槽装多少个不同文件"（79/36/23/15/12/11/6/3，合计 185 > 158）与"每个槽出现多少次引用"
-（合计 191，`_inkFile` 11 次 / `DayStartMessages` 14 次）。本记录一直用前者，生成器现在也按前者算
+（合计 191，`_inkFile` 11 次 / `StageStartMessages` 14 次）。本记录一直用前者，生成器现在也按前者算
 并在句子里写清了基数。
 
 ---
@@ -124,13 +130,13 @@ TextAsset 载荷格式识别：ink **158**、Spine **54**、atlas **44**、other
 Ink 未还原为流程图/线索引，Spine 未还原为骨骼数据。
 
 **但"谁加载哪个剧情文件"这一层已经抽完了，且不碰正文**（本轮新增，`out/ink_wiring.json` +
-`out/ink_inventory.json`）：158/158 有主，主只有 **8 个声明槽**（`ActressAppearData.AppearPhrasesInk`
-79、`ActressData.PersistentPhrasesInk` 36、`ContextGalleryScope._dialogueDatas` 23、
-`ActressAppearData.AppearDialogue` 15、`DayData.DayStartDialogue` 12、`DayData.DayStartMessages` 11、
-`InteractiveAdultPhraseController._inkFile` 6、`DayData.DayEndDialogue` 3），27 个文件被两处引用；
-声明了却没装 ink 的 `DialogueData.DialogueAsset` 是唯一的空槽。
-Ink→C# 的**具名接口**只有 4 个 knot 出现在程序集字符串里、外部函数 1 个（`GetPlayerName`）、
-全局变量 1 个（`playerName`）、listDef 0 —— 剧情侧对引擎的控制面比想象中小得多，
+`out/ink_inventory.json`）：158/158 有主，主只有 **8 个声明槽**（`ActorAppearData.AppearTermsInk`
+79、`ActorData.PersistentTermsInk` 36、`ContextSceneScope._scriptDatas` 23、
+`ActorAppearData.AppearScript` 15、`StageData.StageStartDialogue` 12、`StageData.StageStartMessages` 11、
+`InteractivePhraseController._inkFile` 6、`StageData.StageEndDialogue` 3），27 个文件被两处引用；
+声明了却没装 ink 的 `ScriptData.ScriptAsset` 是唯一的空槽。
+Ink→C# 的**具名接口**只有 4 个 knot 出现在程序集字符串里、外部函数 1 个（`GetUserName`）、
+全局变量 1 个（`userName`）、listDef 0 —— 剧情侧对引擎的控制面比想象中小得多，
 真正的数据流在 PPtr 和 knot 词汇表里。四类文件的 knot 词汇表互不重叠，可直接当分类指纹用。
 
 **"60 个行为簇 ≠ 60 个模块"这条现在是量出来的**（本轮 T12 的副产物，0 次调用）：23 个跨命名空间
@@ -141,7 +147,7 @@ Ink→C# 的**具名接口**只有 4 个 knot 出现在程序集字符串里、�
 
 ### 3.3 明确未完成
 
-- 538 个 blocked 对象，按因分类且每类只差一张布局表：`Nullable<T>`(12 DayData)、`Gradient`(35)/`AnimationCurve`(7)、可序列化字典且类型在 schema 内(17)、`HashSet<uint>`(1)、未绑定泛型 `t0`(19，诚实阻塞)。
+- 538 个 blocked 对象，按因分类且每类只差一张布局表：`Nullable<T>`(12 StageData)、`Gradient`(35)/`AnimationCurve`(7)、可序列化字典且类型在 schema 内(17)、`HashSet<uint>`(1)、未绑定泛型 `t0`(19，诚实阻塞)。
 - 21 个 MISMATCH（含 `ChecklistItemDefinition` 20 处越界）+ 12 个 partial（`LocalizationSettings`）。
 - `confidence floor` 的人工标定集（目前下界仍由规则推导，不是人给的标签）。
 - **T6/T7 的逐行值还停在 SZARRAY 修正之前的元数据版本上**（`out/extField_e*.json` 14:11–14:19、
@@ -225,14 +231,14 @@ Ink→C# 的**具名接口**只有 4 个 knot 出现在程序集字符串里、�
 - `designer_constant` 的 **name contribution = 0.427**；30 个 field-axis 点里 **17 个**在贴错名后越过遮名值
 - `persistent_progress` 只掉 +0.05、错名几乎不动 → **真行为接地**
 - 另一条：**问题指向不完整证据比不指更糟**。曾把 `persistent_progress` 指向"该字段的调用图是否可达序列化 sink"，而 `GameSaveData` 是整张对象图交给 `JsonConvert`，没有任何方法单独碰字段 → 模型正确回答了那个更窄的问题，轴从 +0.79 **塌到 +0.12**。补进真实存档证据后回到 **+0.81 且不依赖名字**。
-- 还有第三条：**有的问题在这个工件里根本没有证据**。`player_visible` 接地后只剩 +0.01——排行榜数值经 Steam overlay 呈现，`Assembly-CSharp` 内没有 UI sink。它 +0.83 的"看起来懂"就是名字。**诚实做法是缩声明，不是抬阈值。**
+- 还有第三条：**有的问题在这个工件里根本没有证据**。`player_visible` 接地后只剩 +0.01——排行榜数值经 platform overlay 呈现，`Assembly-CSharp` 内没有 UI sink。它 +0.83 的"看起来懂"就是名字。**诚实做法是缩声明，不是抬阈值。**
 **结论：gap 大小本身不是接地的证据；遮名消融是判定语义来源的廉价手段（$0.026），也是"模型懂了这个数"与"模型读到了 `Score` 这个词"之间唯一的分界。**
 `python scripts/ablate_name_leak.py`；`python scripts/ablate_name_leak2.py`
 
 ### T8 弃权作为情报
 最中心的 60 个类型里 21 个被判"名字比职责宽"，其中
-`ICurrentDayDataProvider`(score 1.12 / conf **0.00**)、`ICurrentChecklistProvider`(1.08 / **0.00**)、
-`ICurrentActressProvider`(0.98 / **0.00**)。
+`ICurrentStageDataProvider`(score 1.12 / conf **0.00**)、`ICurrentChecklistProvider`(1.08 / **0.00**)、
+`ICurrentActorProvider`(0.98 / **0.00**)。
 这三个正是此前独立存疑的 `*Provider` 命名模式。
 **结论：逆向里"我看不出这类干什么"是可下钩子的位置，属产物而非失败。**
 `python scripts/jev_ask.py audit --top 60`
@@ -296,18 +302,18 @@ TextAsset 槽位；未知=到底哪个字段引用了它。真值不是人标的
 
 **先说不用 Jev 就到手的东西（这一步是真正的架构结论）**：
 - 158 个 ink 文件 **158/158 都被引用**（0 个死文件），引用者只有 5 个类、**8 个槽位**：
-  `ActressAppearData.AppearPhrasesInk`(79) / `ActressData.PersistentPhrasesInk`(36) /
-  `ContextGalleryScope._dialogueDatas`(23) / `ActressAppearData.AppearDialogue`(15) /
-  `DayData.DayStartDialogue`(12) / `DayData.DayStartMessages`(11) /
-  `InteractiveAdultPhraseController._inkFile`(6) / `DayData.DayEndDialogue`(3)；
-  声明了但没装 ink 的第 9 个槽 `DialogueData.DialogueAsset` 后面成了陷阱。
+  `ActorAppearData.AppearTermsInk`(79) / `ActorData.PersistentTermsInk`(36) /
+  `ContextSceneScope._scriptDatas`(23) / `ActorAppearData.AppearScript`(15) /
+  `StageData.StageStartDialogue`(12) / `StageData.StageStartMessages`(11) /
+  `InteractivePhraseController._inkFile`(6) / `StageData.StageEndDialogue`(3)；
+  声明了但没装 ink 的第 9 个槽 `ScriptData.ScriptAsset` 后面成了陷阱。
 - Ink↔C# 的**具名接口窄得惊人**：1012 个 knot 里只有 **4 个**名字出现在程序集的字符串常量里
-  （`greeting_phrases`/`idle_phrases`/`questions`/`polaroid`），且一次出现在 79/79/79/32 个文件里；
-  全库只有 1 个外部函数 `GetPlayerName`、1 个全局变量 `playerName`、0 个 listDef。
+  （`greeting_terms`/`idle_terms`/`questions`/`snapshot`），且一次出现在 79/79/79/32 个文件里；
+  全库只有 1 个外部函数 `GetUserName`、1 个全局变量 `userName`、0 个 listDef。
   **所以"按 knot 名字找接线"这条路是空的**（`ink_inventory.py` 只有 20% 可判，且全判到同一个簇），
   真正的接线在 PPtr 里，不在名字里。
-- 4 套互不重叠的 knot 词汇表就是文件类型的指纹（appear 用 `*_phrases` 那一套、persistent 用
-  `squirt_check/xray/tits_check/polaroid`、day 只有 `main`、adult 只有 `adult_full`）——
+- 4 套互不重叠的 knot 词汇表就是文件类型的指纹（第一套用 `*_terms` 那一套、第二套用
+  `flag_a/flag_c/flag_b/snapshot`、第三套只有 `main`、第四套只有 `flag_d`）——
   于是"分类一个剧情文件"退化成一个集合相似度查表。
 
 Jev 的三臂（真值=集合，选中任一引用者算对；多数类常数基线 0.52）：
@@ -319,7 +325,7 @@ Jev 的三臂（真值=集合，选中任一引用者算对；多数类常数基
 | anon_few（槽位全换成打乱的 `Class_NN.Slot_MN` + 同样 8 例） | 0.907 (136/150) | p≈0 | 1.000 | **0.462** | 0.987 |
 | — 对照：**确定性 1-NN**（knot 集合 Jaccard，同样 8 例，0 调用） | **0.987** (2 错) | — | — | — | — |
 
-- **零样本臂 158/158 全票投给那个陷阱槽位 `DialogueData.DialogueAsset`**，而且**很自信**
+- **零样本臂 158/158 全票投给那个陷阱槽位 `ScriptData.ScriptAsset`**，而且**很自信**
   （p_top 0.65~0.84，mean p(真值) 0.026）。这是本记录里最干净的一次"偏置 ≠ 噪声"：
   覆盖率截断曲线完全救不了它（任何覆盖率下 acc 都是 0.00）。**选择性预测只防噪声，不防系统性偏差。**
 - few 臂与 anon 臂 **投票一致率 0.947**、准确率完全相同 → **name contribution = 0.000**。
@@ -351,10 +357,10 @@ Jev 在这里既不比查表准、又在陷阱选项前表现出自信的零准�
 顺带的 `Noul` 是**问题字典里的兄弟条目**，不能当关键字塞进 `Score(...)`。
 
 **错一：消融漏通道（会让整个对照失效）。** 第一版 `no_folder` 只删 `namespace` 字段，但每条成员签名
-和字段声明里都写着被引用类型的完整限定名（`void .ctor(GlorywallSystem.Core.GlorywallEventType,bool)`），
+和字段声明里都写着被引用类型的完整限定名（`void .ctor(BastionSystem.Core.BastionEventType,bool)`），
 **整棵目录树照样在 state 里**。修法是连点号限定符一起剥（`strip_folders`），并且**花钱之前先证明剥干净**：
 拿程序集里 106 个命名空间逐个在消融后的 JSON 搜 `ns + "."`，命中就 abort。裸串匹配会误报——
-`ActressesDatabase` 这种类型名里含命名空间词，那不是泄漏。
+`ActorsDatabase` 这种类型名里含命名空间词，那不是泄漏。
 
 **错二：两臂共用同一档映射，把派生指标算反了。** `no_folder` 臂的阶梯是二档（第 1 档="不是一个模块"），
 `full` 臂是三档（第 2 档="不是一个模块"），而 `split_of()` 只按三档映射 → 报了 **22/23 翻转**，
@@ -403,8 +409,8 @@ state 多了图：138 次新调用（类型臂 72 次全部缓存命中）$0.013
   信息"，但没有真值，它只能算**待复核清单**。
 
 类型臂两次运行完全一致（缓存命中），产物是按 score 的排序：`Database` 1.54（不止一个职责）→
-`IRoomController` 1.49（三次抽样不一致）→ `IGalleryService`/`GlorywallEvent`/`DayModel` ~1.3 →
-`ActressAppearModel` 0.92 → `StoryBinder` 0.76 → `IPhraseController`/`ActressHolder`/两个
+`IRoomController` 1.49（三次抽样不一致）→ `ISceneService`/`BastionEvent`/`StageModel` ~1.3 →
+`ActorAppearModel` 0.92 → `ScriptBinder` 0.76 → `IPhraseController`/`ActorHolder`/两个
 `ICurrent*Provider` 0.57–0.62（"名字不对"）→ `ShowHideAnimation` 0.33（"名字合适"）。
 12 个全部 mean conf < 借来的地板 0.60（full 臂 4 个正好是 0.00，最高的也只有 0.513），
 **按公开策略这一臂一条都不自动执行**；
@@ -469,7 +475,7 @@ state，Jev 的分布会朝证据动了（置信度、方向都对），但**动
 8. 报告里的数字尽量从侧车读（`authored_values.json`、`map_pre_szarray.json`），手写数字必然腐烂——本项目实际腐烂过两次。
 9. **任何"给范例"的判断先跑一个确定性最近邻基线**（T11：查表 0.987 > Jev 0.907，0 成本）。
    基线不是装饰，它是决定这条流水线要不要存在的东西。
-10. **选项集合里放诱饵要谨慎**：`DialogueData.DialogueAsset` 这种"声明了但没用过"的选项让零样本臂
+10. **选项集合里放诱饵要谨慎**：`ScriptData.ScriptAsset` 这种"声明了但没用过"的选项让零样本臂
     158/158 全错且自信（B9）。要么把诱饵也放进范例，要么在评分里单独看命中诱饵的行。
 11. **消融要连真值一起消融**：遮名臂的标签必须翻译成同一套匿名 id 再评分，否则正确的判断会被
     判成 0 分（T11 的第一版就是这么错的）。
@@ -506,4 +512,4 @@ state，Jev 的分布会朝证据动了（置信度、方向都对），但**动
 | T1–T9 各项（T10/T11/T12 见上面各自的行）**⚠ 输入版本早于 SZARRAY 修正，见 §3.3** | `out/val_*.json`、`out/extField_e*.json`、`out/ablate_name*.json`、`out/audit.json` | 见各节命令 |
 | 报告层：三处已假掉的断言 + T10/T11/T12 的结论改由生成器持有（0 次调用） | `out/ARCHITECTURE.md`、`out/SEMANTICS.md`、`out/VALIDATION.md` | `python scripts/re_report.py && python scripts/extField_report.py`（两个都只读工件，不花钱） |
 | 探针（TypeTree 有无、MonoScript、TextAsset 格式） | `out/PROBE_BRIDGE.md` §1–§5 | `python scripts/probe_bridge_unitypy.py` |
-| 全量 | — | `python scripts/pipeline.py "D:/Downloads/.../Next Girl Please" --workers 28`（加 `--skip-jev` 只重建确定性层与报告，零 API 调用） |
+| 全量 | — | `python scripts/pipeline.py "D:/work/target-build" --workers 28`（加 `--skip-jev` 只重建确定性层与报告，零 API 调用） |

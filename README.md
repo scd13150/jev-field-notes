@@ -3,6 +3,8 @@
 [![checks](https://github.com/scd13150/jev-field-notes/actions/workflows/checks.yml/badge.svg)](https://github.com/scd13150/jev-field-notes/actions/workflows/checks.yml)
 [![license: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
 
+[中文](README.zh.md) · English
+
 **Applications, measurements and failure-mode analysis built on TypeSafe Jev** — the typed-decision
 model that returns `Choice` / `Score` / `Noul` judgments instead of generated text.
 

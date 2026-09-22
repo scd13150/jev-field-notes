@@ -87,6 +87,13 @@ vector applied. Nothing else differs.
 | 2 | Cold resolve | 是我想亲手&lt;了\|LIAO3&gt;结&lt;羂\|JVAN4&gt;索的私心，造成了现在的状况。我的错，就由我来终结！ | wrath 0.85, calm 0.65 · pace 1.05× | [▶ listen](assets/audio/part2_cold_resolve_A_no_emotion.wav) | [▶ listen](assets/audio/part2_cold_resolve_B_with_jev_emotion.wav) |
 | 3 | Domain invocation | 领域展开……！&lt;真\|ZHEN1&gt;&lt;赝\|YAN4&gt;相爱。 | pressure 0.92, calm 0.70 · pace 0.88× | [▶ listen](assets/audio/part3_domain_expansion_A_no_emotion.wav) | [▶ listen](assets/audio/part3_domain_expansion_B_with_jev_emotion.wav) |
 
+![A/B spectrograms, normalized per pair](assets/images/ab_spectrograms.png)
+
+Both files of each pair are rendered at the same loudness, so the difference on screen is timbre rather than
+volume — the measured loudness delta is kept as a label per pair instead of being hidden. In pair 2 the
+Jev-controlled take carries visibly more energy in the 2–4 kHz band; in pair 1 the low band thins out and the
+mid-band energy becomes more diffuse. Those are the perceptual claims above, made checkable.
+
 What changes audibly: in (1) the delivery drops and thins into breath, reading as exhaled
 self-directed contempt rather than narration. In (2) the vocal folds tighten and the consonants
 harden, so the final clause lands as a verdict instead of a statement. In (3) the line slows
@@ -192,14 +199,17 @@ artist's own `<g>` tree is named.
 
 What the `scrambled` arm found is the more useful result:
 
+![Jev is not responsible for whether its evidence is true](assets/images/svg_false_evidence.png)
+
 | Drawing | Real coordinates: hit / confidence | Permuted: hit / confidence | Its own majority baseline |
 | --- | --- | --- | --- |
 | `abstract_nesting` | 0.857 / 0.868 | **0.048 / 0.842** | 0.286 |
 | `house_scene` | 0.812 / 0.782 | 0.219 / 0.788 | 0.250 |
 | `kick_figure` | 0.571 / 0.701 | **0.000 / 0.638** | 0.357 |
 
-Accuracy collapses below every drawing's own majority baseline while **confidence barely moves.**
-There is no capacity to suspect that the coordinates contradict each other.
+Accuracy collapses below every drawing's own majority baseline while confidence changes by −0.026,
++0.006 and −0.063 — a mean of **−0.028**. There is no capacity to suspect that the coordinates
+contradict each other.
 
 > **Confidence measures whether this state contains usable clues. It does not measure whether the
 > clues are true.**

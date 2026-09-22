@@ -47,15 +47,17 @@ inconsistent — real-looking numbers attached to the wrong objects — is the o
 This is the finding worth carrying into any pipeline. Region classification (nine-grid placement)
 was run with real coordinates and then with permuted coordinates:
 
+![Accuracy collapses on permuted coordinates while confidence barely moves](../../assets/images/svg_false_evidence.png)
+
 | Drawing | Real coords: hit | Real coords: confidence | Permuted: hit | Permuted: confidence | Its own majority baseline |
 | --- | --- | --- | --- | --- | --- |
 | `abstract_nesting` | 0.857 | 0.868 | **0.048** | **0.842** | 0.286 |
 | `house_scene` | 0.812 | 0.782 | 0.219 | 0.788 | 0.250 |
 | `kick_figure` | 0.571 | 0.701 | **0.000** | 0.638 | 0.357 |
 
-Accuracy collapses below every drawing's own majority baseline while **confidence barely moves.**
-The model has no capacity to suspect that the coordinates contradict each other. State says it, so
-it infers it.
+Accuracy collapses below every drawing's own majority baseline while confidence changes by **−0.026,
++0.006 and −0.063** — a mean of **−0.028**, far too small to act as a tripwire. The model has no
+capacity to suspect that the coordinates contradict each other. State says it, so it infers it.
 
 The converse is also measured and is the reassuring half: given names with *no* geometry
 (`named_nogeo`), region confidence is only 0.35–0.42 with high-confidence coverage 0.00–0.07. **When

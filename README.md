@@ -326,5 +326,11 @@ Every number in this repository came out of a real API budget. The study in
 **$0.72**; the fight in [Application 1](applications/stick-figure-fighter) is billed per judgment.
 At $42/Btok with output free that is cheap, which is the whole point — but it is not free, so:
 
-<sub>→ [`assets/memes/`](assets/memes) — shared at the TypeSafe team's request.</sub>
+<p align="center">
+  <img src="assets/memes/spare_tokens.jpg" alt="谁还有多余token" width="380">
+</p>
+
+<sub>谁还有多余token — shared at the TypeSafe team's request, who asked for memes when the trial was
+granted. Source template is third-party and not redistributed;
+[`assets/memes/make_meme.py`](assets/memes/make_meme.py) regenerates this file exactly.</sub>
 

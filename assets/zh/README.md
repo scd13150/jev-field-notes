@@ -5,12 +5,13 @@ the originals, and they are the authoritative record of what was written at the 
 
 **One exception, and it is deliberate.** `JEV_CAPABILITY_RECORD.redacted.md` has been sanitized: every
 class, field, asset and script identifier is replaced with a stable neutral alias, the title is not
-named, and the version strings are removed. The analysed work is adult-themed, so leaving its
-identifiers in a public repository would both reveal its subject matter and make it trivially
-identifiable. Aliases preserve the original spelling and length, so every count and structural claim
-is unchanged — verified as **976 numeric tokens identical** to the pre-sanitization text, the only
-differences being the removed engine and title version numbers. This is the only file in the
-repository that is not verbatim, and its name says so.
+named, and the version strings are removed. The originals are withheld to respect the source — it is
+a commercial release, and reproducing its internal identifiers would publish its structure and make
+it trivially identifiable, which is not what this record is for. Aliases preserve the original
+spelling and length, so every count and structural claim is unchanged — verified as **976 numeric
+tokens identical** to the pre-sanitization text, the only differences being the removed engine and
+title version numbers. This is the only file in the repository that is not verbatim, and its name
+says so.
 
 | File | English version | Note |
 | --- | --- | --- |

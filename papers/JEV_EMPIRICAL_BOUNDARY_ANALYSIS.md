@@ -10,13 +10,13 @@ unbilled) · p50 **383 ms**, p90 **806 ms** · error rate **0.0%**
 ---
 
 > **Note on identifiers.** Every class, field, asset and script identifier below has been replaced
-> with a stable neutral alias, and the title itself is not named. The originals are left out
-> deliberately: the analysed work is adult-themed, so reproducing its identifiers would both reveal
-> its subject matter and make it trivially identifiable. Aliases preserve the original spelling and
-> **length**, so structural statements and every count remain exactly as measured — the aliasing
-> changes names only, never a number. The numbers were verified invariant against the
-> pre-sanitization text: 679 numeric tokens unchanged, the only differences being the removed engine
-> and title version strings.
+> with a stable neutral alias, and the analysed title is not named. The originals are withheld to
+> respect the source: the work is a commercial release, and reproducing its internal identifiers
+> would publish its structure and make it trivially identifiable, which is not what this study is
+> for. Aliases preserve the original spelling and **length**, so structural statements and every
+> count remain exactly as measured — the aliasing changes names only, never a number. The numbers
+> were verified invariant against the pre-sanitization text: 679 numeric tokens unchanged, the only
+> differences being the removed engine and title version strings.
 
 ## 0. Why this study exists, and how to read it
 

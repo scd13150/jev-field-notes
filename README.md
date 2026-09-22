@@ -1,25 +1,25 @@
 # Field notes on Jev (System One)
 
-Applications, measurements and failure-mode analysis built on **TypeSafe Jev** — the
-typed-decision model that returns `Choice` / `Score` / `Noul` judgments instead of generated text.
+**Applications, measurements and failure-mode analysis built on TypeSafe Jev** — the typed-decision
+model that returns `Choice` / `Score` / `Noul` judgments instead of generated text.
 
-Everything here was built against the public System One API. The measurements in
-[Paper 2](papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md) and
-[Application 3](applications/svg-line-partition) are taken on **`jev-1.13.0`, pinned on purpose**;
-where a client in this repository still reads the `jev-latest` alias, that is called out as a defect
-rather than hidden, because thresholds tuned against one version move when the alias does.
+<p align="center">
+  <img src="assets/images/fight_stance_triangle.gif" alt="A Jev-driven fighter (red) fighting a player (blue)" width="620">
+</p>
 
-Two of the three applications include an offline harness, so the central claims can be checked
-without spending anything: the fighting game ships a deterministic mock decider and a 52-case test
-suite, and the SVG probe ships parsing assertions plus a disk cache that makes re-runs free.
+<p align="center"><sub>A real round against the live API. The red fighter is Jev; the HUD prints the compiled strategy and the measured round-trip latency. <a href="#application-1--a-fighting-game-opponent-that-runs-on-judgments">Application 1</a>.</sub></p>
 
-The through-line across all three applications is one division of labour:
+The through-line across everything here is one division of labour:
 
 > **Deterministic code owns everything that has a truth table — bytes, frame data, geometry,
 > arithmetic, thresholds. Jev is asked only the question no table can answer: what does this mean?**
 
-That line is not a slogan here. It is the thing that was measured: where it was crossed, the
-result was worse than doing nothing, and those cases are the most useful part of this repository.
+That line is not a slogan here. It is the thing that was measured: where it was crossed, the result
+was worse than doing nothing, and those cases turned out to be the most useful part of the repository.
+
+**Three applications,** across three unrelated domains — a real-time game, audio synthesis, and
+vector drawing — plus two papers and a list of sixteen falsifiable findings. Two of the three run
+offline with no API key, so the claims can be checked for free.
 
 ---
 
@@ -28,7 +28,8 @@ result was worse than doing nothing, and those cases are the most useful part of
 | | What | Jev's role | Entry point |
 | --- | --- | --- | --- |
 | **[Listening room](#listening-room--emotion-controlled-speech)** | 3 A/B pairs of synthesized dialogue, Jev-driven vs baseline | drives a synthesizer | [`assets/audio/`](assets/audio) |
-| **[Application 1](applications/stick-figure-fighter)** | 2D fighting game where the opponent's brain is six typed judgments per request | **in production** | `npm test`, `node scripts/spar.mjs --mock` || **[Application 2](applications/emotion-controlled-tts)** | Jev judgment → 8-D emotion vector → parametric TTS | **in production** | [`README`](applications/emotion-controlled-tts) |
+| **[Application 1](applications/stick-figure-fighter)** | 2D fighting game where the opponent's brain is six typed judgments per request | **in production** | `npm test`, `node scripts/spar.mjs --mock` |
+| **[Application 2](applications/emotion-controlled-tts)** | Jev judgment → 8-D emotion vector → parametric TTS | **in production** | [`README`](applications/emotion-controlled-tts) |
 | **[Application 3](applications/svg-line-partition)** | Capability-ceiling probe: can it partition a drawing from text alone? | **under test** | `python -m src.selftest` |
 | **[Paper 1](papers/JEV_AS_A_TYPE_ADAPTER.md)** | Jev as a typed boundary between language and code | — | — |
 | **[Paper 2](papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md)** | 8,000 calls on a Unity Mono binary: what Jev is and is not, plus an addendum from a third domain | — | — |
@@ -37,6 +38,12 @@ result was worse than doing nothing, and those cases are the most useful part of
 
 Three of these put Jev to work; the third deliberately tries to break it. That split is on purpose —
 a repository that only shows successes has not tested anything.
+
+Everything was built against the public System One API. The measurements in
+[Paper 2](papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md) and
+[Application 3](applications/svg-line-partition) are taken on **`jev-1.13.0`, pinned on purpose**;
+where a client here still reads the `jev-latest` alias, that is called out as a defect rather than
+hidden, because thresholds tuned against one version move when the alias does.
 
 ---
 
@@ -117,10 +124,9 @@ dependencies, 52 tests, no API key needed to run any of them.
 A deterministic 60 Hz fighting engine (frame data, AABB hit/hurt boxes, cancel-window combos,
 juggle bounds, damage scaling, projectiles) where one fighter is driven by Jev.
 
-![Jev fighting the player: the stance triangle in motion](assets/images/fight_stance_triangle.gif)
-
-The red fighter is Jev, answering live over the public API; the blue one is a scripted player. The
-HUD under the arena prints the compiled strategy and the measured round-trip latency, so the
+The round captured at the top of this page is this application: the red fighter is Jev, answering
+live over the public API, and the blue one is a scripted player. The HUD under the arena prints the
+compiled strategy and the measured round-trip latency, so the
 decision and its cost are visible in the same frame as the fight.
 
 The interesting engineering problem is that a live Jev round trip is **0.4–1.3 s** and a frame is

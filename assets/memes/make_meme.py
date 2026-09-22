@@ -10,30 +10,39 @@ Usage:
     python make_meme.py path\\to\\base.jpg [out.jpg]
 
 The committed caption (spare_tokens.jpg) was produced from the 1053x1008 version
-of the template with these exact settings. Sizes are in pixels and are absolute,
-not relative, so a different-resolution base will place the text differently --
-adjust SIZE and the width ceiling together if you swap the source.
+of the template with these exact settings. Sizes are absolute, not relative, so a
+different-resolution base will place the text differently -- change SIZE and the
+width ceiling together if you swap the source.
+
+Language note: the caption is in English because the audience for this repository
+is an English-speaking engineering team. A Chinese-only caption is a joke they
+cannot read, which defeats the point. The two-line form exists because the full
+question set on one line caps out around 76px, which is far too small to carry a
+meme; splitting it allows 142px.
 """
 import os
 import sys
 from PIL import Image, ImageDraw, ImageFont
 
-TEXT = "谁还有多余token"
+# One string per line, top to bottom. The committed file uses these two.
+LINES = ["anyone got", "spare tokens?"]
 
 # Treatment, chosen to match the original meme's look and the image's own accents.
-SIZE = 128              # largest size at which all 9 glyphs fit this width
-FILL = (255, 199, 56)   # gold: picks up the chain and watch, reads on the navy suit
-OUTLINE = (28, 16, 0)   # near-black, warm, so the edge does not look pasted on
-STROKE = 9              # outline width
-BOTTOM_PAD = 2          # px of clearance under the baseline
-WIDTH_CEILING = 0.985   # never let the caption exceed this fraction of the width
+FILL = (255, 199, 56)     # gold: picks up the chain and watch, reads on the navy suit
+OUTLINE = (28, 16, 0)     # near-black, warm, so the edge does not look pasted on
+STROKE = 9                # outline width
+BOTTOM_PAD = 4            # px of clearance below the last line
+LINE_GAP_RATIO = 0.16     # leading between lines, as a fraction of the font size
+WIDTH_CEILING = 0.955     # never let a line exceed this fraction of the width
+HEIGHT_CEILING = 0.36     # sanity bound: the block must not swallow the picture.
+                          # The committed two-line treatment is 343px of 1008 = 34%, which
+                          # is deliberate -- this is meant to dominate, as the original did.
 
 FONT_CANDIDATES = [
-    r"C:\Windows\Fonts\msyhbd.ttc",     # Microsoft YaHei Bold -- the committed file
-    r"C:\Windows\Fonts\simhei.ttf",     # SimHei, heavier and squarer
-    r"C:\Windows\Fonts\msyh.ttc",
-    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-    "/System/Library/Fonts/PingFang.ttc",
+    r"C:\Windows\Fonts\msyhbd.ttc",     # Microsoft YaHei Bold -- used for the committed file
+    r"C:\Windows\Fonts\arialbd.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+    "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
 ]
 
 
@@ -41,7 +50,7 @@ def pick_font():
     for p in FONT_CANDIDATES:
         if os.path.exists(p):
             return p
-    raise SystemExit("no CJK font found; add one to FONT_CANDIDATES")
+    raise SystemExit("no bold font found; add one to FONT_CANDIDATES")
 
 
 def main():
@@ -53,22 +62,47 @@ def main():
 
     im = Image.open(src).convert("RGB")
     W, H = im.size
-    font = ImageFont.truetype(pick_font(), SIZE)
-    d = ImageDraw.Draw(im)
+    probe = ImageDraw.Draw(im)
 
-    bb = d.textbbox((0, 0), TEXT, font=font, stroke_width=STROKE)
-    tw = bb[2] - bb[0]
-    if tw > W * WIDTH_CEILING:
+    def width_at(text, size):
+        f = ImageFont.truetype(pick_font(), size)
+        bb = probe.textbbox((0, 0), text, font=f, stroke_width=STROKE)
+        return bb[2] - bb[0]
+
+    # largest size at which EVERY line fits the width
+    size = None
+    for s in range(30, 400, 2):
+        if all(width_at(l, s) <= W * WIDTH_CEILING for l in LINES):
+            size = s
+        else:
+            break
+    if size is None:
+        raise SystemExit("not even the smallest size fits; check LINES and WIDTH_CEILING")
+
+    font = ImageFont.truetype(pick_font(), size)
+    metrics = []
+    for l in LINES:
+        bb = probe.textbbox((0, 0), l, font=font, stroke_width=STROKE)
+        metrics.append((l, bb, bb[3] - bb[1]))
+    gap = int(size * LINE_GAP_RATIO)
+    block_h = sum(m[2] for m in metrics) + gap * (len(LINES) - 1)
+
+    if block_h > H * HEIGHT_CEILING:
         raise SystemExit(
-            f"caption is {tw}px wide, over the {int(W * WIDTH_CEILING)}px ceiling for a "
-            f"{W}px image -- lower SIZE and re-run rather than clipping the text")
+            f"caption block is {block_h}px tall, over the {int(H * HEIGHT_CEILING)}px ceiling "
+            f"for a {H}px image -- lower the size or use fewer lines")
 
-    x = (W - tw) / 2 - bb[0]
-    y = H - bb[3] - BOTTOM_PAD          # glyph bottoms sit just above the edge
-    d.text((x, y), TEXT, font=font, fill=FILL, stroke_width=STROKE, stroke_fill=OUTLINE)
+    d = ImageDraw.Draw(im)
+    y = H - block_h - BOTTOM_PAD
+    for l, bb, h in metrics:
+        tw = bb[2] - bb[0]
+        x = (W - tw) / 2 - bb[0]
+        d.text((x, y - bb[1]), l, font=font, fill=FILL, stroke_width=STROKE, stroke_fill=OUTLINE)
+        y += h + gap
 
     im.save(dst, format="JPEG", quality=92, optimize=True)
-    print(f"wrote {dst}  ({im.size[0]}x{im.size[1]}, caption {tw}px wide)")
+    print(f"wrote {dst}  ({W}x{H}, size {size}px, block {block_h}px tall, "
+          f"widest line {max(width_at(l, size) for l in LINES)}px)")
 
 
 if __name__ == "__main__":

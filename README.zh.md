@@ -117,6 +117,8 @@ python -m src.analyze
 
 完整 16 条见 [`docs/FINDINGS.md`](docs/FINDINGS.md)。
 
+**想先读一篇完整的中文文章?** 见 [`docs/zh/BOUNDARY_ANALYSIS.zh.md`](docs/zh/BOUNDARY_ANALYSIS.zh.md) —— 从「为什么要测它不行」讲到七条可搬走的原则。
+
 ---
 
 ## 仓库结构

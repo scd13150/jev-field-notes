@@ -8,6 +8,13 @@ import { FIGHTER } from "/src/engine/constants.js";
 
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+// A drawable point: present and finite. NaN coordinates are the dangerous case,
+// because NaN fails no `null` check but still poisons the canvas path.
+function finitePoint(p) {
+  return !!p && typeof p.x === "number" && isFinite(p.x)
+            && typeof p.y === "number" && isFinite(p.y);
+}
+
 // A 2-bone "bone" from a->b with the joint pushed perpendicular by `bend`.
 function bone(a, b, bend) {
   const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
@@ -200,6 +207,10 @@ export class View {
   }
 
   stroke2(ctx, a, j, b, w) {
+    // A limb or torso point can be missing on a transitional frame. Without this
+    // guard the line below throws and aborts drawFighter, which silently costs the
+    // REST of that fighter's body and every fighter drawn after it.
+    if (!finitePoint(a) || !finitePoint(b)) return;
     if (w) ctx.lineWidth = w;
     ctx.beginPath();
     if (j) { ctx.moveTo(a.x, a.y); ctx.lineTo(j.x, j.y); ctx.lineTo(b.x, b.y); }

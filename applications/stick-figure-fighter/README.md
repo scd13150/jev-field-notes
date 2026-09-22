@@ -21,6 +21,13 @@ node scripts/spar.mjs --mock --fast   # free headless dual-JEV battle + report
 node server/server.js                 # play in the browser: http://127.0.0.1:8787
 ```
 
+![Jev fighting the player: the stance triangle in motion](../../assets/images/fight_stance_triangle.gif)
+
+A real round against the live API (`TYPESAFE_API_KEY` in the environment, key server-side only). The
+red fighter is driven by Jev; the blue one is a scripted player. The HUD line under the arena reads
+back the compiled strategy and the measured round-trip latency, so what the model decided is visible
+next to what happened. Same run, from the probe: **322–1216 ms** per judgment, median **384 ms**.
+
 The API key is read from the environment (`TYPESAFE_API_KEY`); copy
 `.env.example` and export it, or set it in your shell. **The key stays on the
 server** — the browser only ever calls `/api/jev`.

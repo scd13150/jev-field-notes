@@ -28,8 +28,7 @@ result was worse than doing nothing, and those cases are the most useful part of
 | | What | Jev's role | Entry point |
 | --- | --- | --- | --- |
 | **[Listening room](#listening-room--emotion-controlled-speech)** | 3 A/B pairs of synthesized dialogue, Jev-driven vs baseline | drives a synthesizer | [`assets/audio/`](assets/audio) |
-| **[Application 1](applications/stick-figure-fighter)** | 2D fighting game where the opponent's brain is six typed judgments per request | **in production** | `npm test`, `node scripts/spar.mjs --mock` |
-| **[Application 2](applications/emotion-controlled-tts)** | Jev judgment → 8-D emotion vector → parametric TTS | **in production** | [`README`](applications/emotion-controlled-tts) |
+| **[Application 1](applications/stick-figure-fighter)** | 2D fighting game where the opponent's brain is six typed judgments per request | **in production** | `npm test`, `node scripts/spar.mjs --mock` || **[Application 2](applications/emotion-controlled-tts)** | Jev judgment → 8-D emotion vector → parametric TTS | **in production** | [`README`](applications/emotion-controlled-tts) |
 | **[Application 3](applications/svg-line-partition)** | Capability-ceiling probe: can it partition a drawing from text alone? | **under test** | `python -m src.selftest` |
 | **[Paper 1](papers/JEV_AS_A_TYPE_ADAPTER.md)** | Jev as a typed boundary between language and code | — | — |
 | **[Paper 2](papers/JEV_EMPIRICAL_BOUNDARY_ANALYSIS.md)** | 8,000 calls on a Unity Mono binary: what Jev is and is not | — | — |
@@ -117,6 +116,12 @@ dependencies, 52 tests, no API key needed to run any of them.
 
 A deterministic 60 Hz fighting engine (frame data, AABB hit/hurt boxes, cancel-window combos,
 juggle bounds, damage scaling, projectiles) where one fighter is driven by Jev.
+
+![Jev fighting the player: the stance triangle in motion](assets/images/fight_stance_triangle.gif)
+
+The red fighter is Jev, answering live over the public API; the blue one is a scripted player. The
+HUD under the arena prints the compiled strategy and the measured round-trip latency, so the
+decision and its cost are visible in the same frame as the fight.
 
 The interesting engineering problem is that a live Jev round trip is **0.4–1.3 s** and a frame is
 **16.7 ms**. A model therefore cannot be asked per frame. The loop is a pipeline instead of a
